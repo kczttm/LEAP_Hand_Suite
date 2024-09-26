@@ -1,0 +1,49 @@
+# Copyright (c) 2022, NVIDIA CORPORATION.  All rights reserved.
+#
+# NVIDIA CORPORATION and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA CORPORATION is strictly prohibited.
+#
+# edited by Chuizheng Kong 
+# on 07/29/2024
+
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+
+# figure out how to cache the installation of the following packages
+ENV VIRTUAL_ENV=/usr/local
+ADD --chmod=755 https://astral.sh/uv/install.sh /install.sh
+RUN /install.sh && rm /install.sh
+ 
+# cache the installation of the following packages
+RUN --mount=type=cache,target=/root/.cache \
+    /root/.cargo/bin/uv pip install --system \
+        torch \
+        torchvision \
+        torchaudio \
+        opencv-python \
+        matplotlib \
+        tqdm \
+        ipykernel \
+        gym \
+        omegaconf \
+        termcolor \
+        hydra-core>=1.1 \
+        rl-games \
+        pyvirtualdisplay
+
+# cache the installation of the ISAAC SIM Packages
+RUN python3 -m pip install \
+	isaacsim-rl \
+	isaacsim-replicator \
+	isaacsim-extscache-physics \
+	isaacsim-extscache-kit-sdk \
+	isaacsim-extscache-kit \
+	isaacsim-app \
+    --extra-index-url https://pypi.nvidia.com
+
+RUN --mount=type=cache,target=/root/.cache \
+    /root/.cargo/bin/uv pip uninstall --system \
+        opencv-python-headless 

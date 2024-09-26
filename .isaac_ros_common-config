@@ -1,0 +1,2 @@
+CONFIG_IMAGE_KEY="ros2_humble.leaphand"
+CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/isaac_ros-dev/src/LEAP_Hand_Suite)
