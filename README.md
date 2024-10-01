@@ -27,9 +27,8 @@ git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git
 ```
 cd ~/workspaces/isaac_ros-dev/src
 git clone https://github.com/kczttm/LEAP_Hand_Suite
+cd LEAP_Hand_Suite
 ```
-Then navigate to the project root folder.
-
 ### Prepare to run the docker composition
 Move the Isaac ROS Common Config file to home
 ```
