@@ -13,13 +13,14 @@ ARG BASE_IMAGE
 FROM $BASE_IMAGE
 
 # figure out how to cache the installation of the following packages
-ENV VIRTUAL_ENV=/usr/local
-ADD --chmod=755 https://astral.sh/uv/install.sh /install.sh
-RUN /install.sh && rm /install.sh
+# ENV VIRTUAL_ENV=/usr/local
+# ADD --chmod=755 https://astral.sh/uv/install.sh /install.sh
+# RUN /install.sh && rm /install.sh
+RUN pip install uv==0.5.1
  
 # cache the installation of the following packages
 RUN --mount=type=cache,target=/root/.cache \
-    /root/.cargo/bin/uv pip install --system \
+    uv pip install --system \
         torch \
         torchvision \
         torchaudio \
@@ -32,18 +33,21 @@ RUN --mount=type=cache,target=/root/.cache \
         termcolor \
         hydra-core>=1.1 \
         rl-games \
-        pyvirtualdisplay
+        pyvirtualdisplay \
+        numpy \
+        dynamixel_sdk
 
 # cache the installation of the ISAAC SIM Packages
-RUN python3 -m pip install \
-	isaacsim-rl \
-	isaacsim-replicator \
-	isaacsim-extscache-physics \
-	isaacsim-extscache-kit-sdk \
-	isaacsim-extscache-kit \
-	isaacsim-app \
-    --extra-index-url https://pypi.nvidia.com
+# RUN python3 -m pip install \
+# 	isaacsim-rl \
+# 	isaacsim-replicator \
+# 	isaacsim-extscache-physics \
+# 	isaacsim-extscache-kit-sdk \
+# 	isaacsim-extscache-kit \
+# 	isaacsim-app \
+#     --extra-index-url https://pypi.nvidia.com
 
+# opencv bug
 RUN --mount=type=cache,target=/root/.cache \
-    /root/.cargo/bin/uv pip uninstall --system \
+    uv pip uninstall --system \
         opencv-python-headless 
